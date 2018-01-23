@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="description" content="Create CSV from data">
+
+		<title>CSV Generator</title>
+
+		<style>
+			body {
+			
+			  width: 60%;
+			  margin: 0 auto;		
+			}
+
+
+			h1 {
+			
+			  font-family: Georgia, "Times New Roman", serif;
+			  font-size: 2.5em;
+			  font-weight: normal;
+			  font-style: bold;
+			}
+
+
+			h5 {
+			 
+			font-family: Georgia, "Times New Roman", serif;	
+			font-size: 11px;
+			font-Weight: normal;
+			font-style: italic;	
+			}
+
+		</style>
+
+
+		<script type="text/javascript">
+
+
+			//
+			//Checks if a string is empty, null or undefined
+			function isEmpty(str) {
+				return (!str || 0 === str.length);
+			}
+
+
+
+			// removes defined value from array looping backwards since indices (index) and length will be changed as items are removed
+			//
+			function remove(arr, item) {
+			
+				for(var i = arr.length; i--;) {
+					if (arr[i] === item) {
+
+						arr.splice(i, 1);
+					}
+				}
+			}
+
+				
+
+//		
+// 8/22/2016 - fixed IE issue where it would leave just the comma for blank spaces from dirty data - LS 
+//
+
+			//splits Id="Text1" into array and trims spaces before and after to clean up text
+			function NameIntoArray() {
+
+
+				var lines = document.getElementById("Text1").value;
+				 					
+				var arrayLines = lines.split("\n");		
+				
+				var fixedArrayLines = [];
+				
+
+						
+
+
+				for (i = 0; i < arrayLines.length; i++){
+
+					
+					if (arrayLines[i] != "" && "," || null && ","){
+						
+						arrayLines[i] = arrayLines[i].replace(/^\s+|\s+$/g, "");
+
+						
+							
+						// cleans arrayLines by removing blank spaces, tabs between words and stores
+						 // in array fixedArrayLines with no extra spaces and with a new line added to second array	
+						if (fixedArrayLines != "" && "," || null && ",") {			
+								
+							fixedArrayLines += "," + "\n" + arrayLines[i].replace(/\s+/g, " ");
+								
+						}else{
+							fixedArrayLines = arrayLines[i].replace(/\s+/g, " ");
+
+									
+						}		
+									
+						     
+						var finalValueArray = fixedArrayLines.split("\n");
+
+						remove(finalValueArray, ",");
+
+					    // debug purposes only
+						//console.log(arrayLines[i]);
+					}
+
+				}
+			
+				document.getElementById("Text1").value = finalValueArray.join("\n");
+
+
+					
+	
+			}
+			
+
+			//used when browser does not support trim function
+			//
+			function myTrim(x) {
+				return
+				x.replace(/^\s+|\s+$/gm,'');
+			}	
+
+
+
+			
+			//keep from pasting undefined in textarea
+
+			function isUndefined(array, index) {
+				return ((String(array[index]) == "undefined") ? "Yes" : "No");
+			}
+
+		</script>
+
+
+	</head>
+
+
+
+	<body>
+
+		<h1>CSV Generator Tool</h1>
+		
+		<form> 
+			<h5>Type or Paste values below</h5>
+
+			<textarea id="Text1" cols="40" rows="40"> </textarea>
+			<br>
+			<br>
+
+			<input type="button" value="Create CSV / New Line Data" onClick="NameIntoArray()"/>
+			
+		</form>
+
+	</body>
+
+
+</html>
